@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">MLS Pick \'Em</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="image_backup">team logo</string>
+    <string name="middle">vs.</string>
+    <string name="time">Game time</string>
+    <string name="date">Game date</string>
+    <string name="home_cd">Home Team Logo</string>
+    <string name="away_cd">Away Team Logo</string>
+    <string name="title_activity_edit">MLS Pick \'Em</string>
+</resources>
