@@ -39,12 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        // set action bar color
-        //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xFFF44336));
-
-        // set fab color and icon
+        // set icon
         final FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
-        //fab.setBackgroundTintList(ColorStateList.valueOf(0xFF448AFF));
         fab.setImageResource(R.drawable.ic_lock_outline_white_24dp);
 
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recyclerList);
