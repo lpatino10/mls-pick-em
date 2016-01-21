@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
@@ -64,11 +65,19 @@ public class MyDatabase extends SQLiteAssetHelper {
         //Log.d("Month Test", String.valueOf(nextWeek.get(Calendar.MONTH)));
 
         qb.setTables(sqlTables);
-        Cursor c = qb.query(db, sqlSelect, null, null, null, null, null); // month + 1 because Jan = 0
+        Cursor c;
+        List<GameInfo> matches = new ArrayList<>();
+
+        try {
+            c = qb.query(db, sqlSelect, null, null, null, null, null); // month + 1 because Jan = 0
+        }
+        catch (SQLiteException e) {
+            Log.e("SQL Error", e.toString());
+            return matches;
+        }
 
         c.moveToFirst();
 
-        List<GameInfo> matches = new ArrayList<>();
         int position = 0;
 
         /*
