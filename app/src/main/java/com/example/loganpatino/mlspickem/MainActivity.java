@@ -1,6 +1,9 @@
 package com.example.loganpatino.mlspickem;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -28,8 +31,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private List<GameInfo> schedule;
-    private MyDatabase db;
+    private boolean onMainScreen = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +41,19 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        FragmentManager fragmentManager = getFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.content_frame);
+
+        if (fragment == null) {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.content_frame, new GameListFragment());
+            fragmentTransaction.commit();
+        }
+
         // set icon
         final FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_lock_outline_white_24dp);
 
-        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recyclerList);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(llm);
-
-        db = new MyDatabase(this);
-        schedule = db.getMatches();
-
-        recyclerView.setAdapter(new MyRecyclerAdapter(schedule));
 
         fab.setOnClickListener(new View.OnClickListener() {
 
@@ -59,53 +61,35 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                /*if (clicked) {
-                    fab.setImageResource(R.drawable.ic_lock_outline_white_24dp);
-                    clicked = false;
+                if (onMainScreen) {
+                    fab.setImageResource(R.drawable.ic_lock_open_white_24dp);
+                    onMainScreen = false;
                 }
                 else {
-                    fab.setImageResource(R.drawable.ic_lock_open_white_24dp);
-                    clicked = true;
-                }*/
+                    fab.setImageResource(R.drawable.ic_lock_outline_white_24dp);
+                    onMainScreen = true;
+                }
 
-                startEdit(v);
-
+                clickAction();
             }
         });
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+    public void clickAction() {
+        FragmentManager fragmentManager = getFragmentManager();
+        Fragment fragment;
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (onMainScreen) {
+            fragment = new GameListFragment();
+        }
+        else {
+            fragment = new EditFragment();
         }
 
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        db.close();
-    }
-
-    public void startEdit(View v) {
-        Intent intent = new Intent(this, EditActivity.class);
-        startActivity(intent);
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, fragment);
+        fragmentTransaction.commit();
     }
 
 

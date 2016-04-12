@@ -16,14 +16,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".EditActivity"
-            android:label="@string/title_activity_edit"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.loganpatino.mlspickem.MainActivity" />
-        </activity>
     </application>
 
 </manifest>
