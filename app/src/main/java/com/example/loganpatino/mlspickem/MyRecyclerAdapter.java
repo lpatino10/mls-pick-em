@@ -14,9 +14,9 @@ import java.util.List;
  */
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MatchViewHolder> {
 
-    private List<GameInfo> matches;
+    private List<Game> matches;
 
-    public MyRecyclerAdapter(List<GameInfo> matches) {
+    public MyRecyclerAdapter(List<Game> matches) {
         this.matches = new ArrayList<>();
         this.matches.addAll(matches);
     }
@@ -29,11 +29,11 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MatchViewHolder> {
 
     @Override
     public void onBindViewHolder(final MatchViewHolder holder, int position) {
-        GameInfo matchup = matches.get(position);
-        holder.homeLogo.setImageResource(matchup.getHomeLogo());
-        holder.awayLogo.setImageResource(matchup.getAwayLogo());
-        holder.date.setText(matchup.getDate());
-        holder.time.setText(matchup.getTime() + " PM");
+        Game matchup = matches.get(position);
+        holder.homeLogo.setImageResource(Utility.getLogoResource(matchup.getHome()));
+        holder.awayLogo.setImageResource(Utility.getLogoResource(matchup.getAway()));
+        holder.date.setText(Utility.getDateString(matchup.getDate()));
+        holder.time.setText(Utility.getTimeString(matchup.getTime()));
 
         holder.homeLogo.setOnClickListener(new View.OnClickListener() {
             boolean clicked = false;

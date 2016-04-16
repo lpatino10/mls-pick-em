@@ -10,4 +10,25 @@
     <string name="home_cd">Home Team Logo</string>
     <string name="away_cd">Away Team Logo</string>
     <string name="title_activity_edit">MLS Pick \'Em</string>
+    
+    <string name="fire">Chicago Fire</string>
+    <string name="rapids">Colorado Rapids</string>
+    <string name="crew">Columbus Crew SC</string>
+    <string name="dc">D.C. United</string>
+    <string name="dallas">FC Dallas</string>
+    <string name="dynamo">Houston Dynamo</string>
+    <string name="galaxy">LA Galaxy</string>
+    <string name="impact">Montreal Impact</string>
+    <string name="revolution">New England Revolution</string>
+    <string name="nyc">New York City FC</string>
+    <string name="red_bulls">New York Red Bulls</string>
+    <string name="orlando">Orlando City SC</string>
+    <string name="union">Philadelphia Union</string>
+    <string name="timbers">Portland Timbers</string>
+    <string name="rsl">Real Salt Lake</string>
+    <string name="earthquakes">San Jose Earthquakes</string>
+    <string name="sounders">Seattle Sounders FC</string>
+    <string name="skc">Sporting Kansas City</string>
+    <string name="toronto">Toronto FC</string>
+    <string name="whitecaps">Vancouver Whitecaps FC</string>
 </resources>
