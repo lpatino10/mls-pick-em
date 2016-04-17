@@ -32,21 +32,24 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private boolean onMainScreen = true;
+    Fragment mGameListFragment;
+    Fragment mEditFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_main);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
-        setContentView(R.layout.activity_main);
+        mGameListFragment = new GameListFragment();
+        mEditFragment = new EditFragment();
 
         FragmentManager fragmentManager = getFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.content_frame);
 
         if (fragment == null) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.content_frame, new GameListFragment());
+            fragmentTransaction.add(R.id.content_frame, mGameListFragment);
             fragmentTransaction.commit();
         }
 
@@ -81,10 +84,10 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment;
 
         if (onMainScreen) {
-            fragment = new GameListFragment();
+            fragment = mGameListFragment;
         }
         else {
-            fragment = new EditFragment();
+            fragment = mEditFragment;
         }
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
