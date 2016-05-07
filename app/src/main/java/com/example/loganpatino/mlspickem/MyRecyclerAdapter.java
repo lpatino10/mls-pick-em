@@ -2,6 +2,7 @@ package com.example.loganpatino.mlspickem;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,13 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MatchViewHolder> {
         holder.awayLogo.setImageResource(Utility.getLogoResource(matchup.getAway()));
         holder.date.setText(Utility.getDateString(matchup.getDate()));
         holder.time.setText(Utility.getTimeString(matchup.getTime()));
+
+        int homeScore = matchup.getHomeScore();
+        int awayScore = matchup.getAwayScore();
+        if (homeScore != -1) {
+            String score = homeScore + "-" + awayScore;
+            holder.score.setText(score);
+        }
 
         holder.homeLogo.setOnClickListener(new View.OnClickListener() {
             boolean clicked = false;

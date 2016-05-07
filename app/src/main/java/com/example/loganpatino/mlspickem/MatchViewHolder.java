@@ -24,6 +24,7 @@ public class MatchViewHolder extends RecyclerView.ViewHolder {
     protected ImageView homeLogo;
     protected ImageView awayLogo;
     protected TextView draw;
+    protected TextView score;
 
     public MatchViewHolder(View itemView) {
         super(itemView);
@@ -35,6 +36,7 @@ public class MatchViewHolder extends RecyclerView.ViewHolder {
         homeLayout = (RelativeLayout)itemView.findViewById(R.id.homeLayout);
         awayLayout = (RelativeLayout)itemView.findViewById(R.id.awayLayout);
         drawLayout = (RelativeLayout)itemView.findViewById(R.id.drawLayout);
+        score = (TextView)itemView.findViewById(R.id.score_text);
 
         /*homeLogo.setOnClickListener(new View.OnClickListener() {
 

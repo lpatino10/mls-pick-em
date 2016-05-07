@@ -30,14 +30,13 @@
                 android:layout_weight=".34">
 
                 <ImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:id="@+id/home_team"
                     android:contentDescription="@string/home_cd"
-                    android:paddingLeft="20dp"
+                    android:padding="20dp"
                     android:clickable="true"
                     android:nestedScrollingEnabled="false"
-                    android:paddingRight="20dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentStart="true" />
 
@@ -53,7 +52,7 @@
                     android:layout_height="100dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/middle"
-                    android:id="@+id/textView"
+                    android:id="@+id/score_text"
                     android:gravity="center"
                     android:layout_centerHorizontal="true" />
 
@@ -65,13 +64,12 @@
                 android:layout_weight=".33">
 
                 <ImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:id="@+id/away_team"
                     android:contentDescription="@string/away_cd"
                     android:focusable="true"
-                    android:paddingRight="20dp"
-                    android:paddingLeft="20dp"
+                    android:padding="20dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"/>
 
