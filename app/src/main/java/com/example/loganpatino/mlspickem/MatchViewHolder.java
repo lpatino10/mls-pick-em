@@ -4,6 +4,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -23,78 +24,68 @@ public class MatchViewHolder extends RecyclerView.ViewHolder {
     protected RelativeLayout drawLayout;
     protected ImageView homeLogo;
     protected ImageView awayLogo;
-    protected TextView draw;
     protected TextView score;
+    protected TextView pick;
+    protected TextView homeWin;
+    protected TextView draw;
+    protected TextView awayWin;
 
-    public MatchViewHolder(View itemView) {
+    public MatchViewHolder(View itemView, final Utility.Screen cardType, final RecyclerView.Adapter<MatchViewHolder> adapter) {
         super(itemView);
         homeLogo = (ImageView)itemView.findViewById(R.id.home_team);
         awayLogo = (ImageView)itemView.findViewById(R.id.away_team);
         date = (TextView)itemView.findViewById(R.id.date_string);
         time = (TextView)itemView.findViewById(R.id.time_string);
-        draw = (TextView)itemView.findViewById(R.id.draw);
         homeLayout = (RelativeLayout)itemView.findViewById(R.id.homeLayout);
         awayLayout = (RelativeLayout)itemView.findViewById(R.id.awayLayout);
         drawLayout = (RelativeLayout)itemView.findViewById(R.id.drawLayout);
         score = (TextView)itemView.findViewById(R.id.score_text);
+        pick = (TextView)itemView.findViewById(R.id.pick);
 
-        /*homeLogo.setOnClickListener(new View.OnClickListener() {
+        if (cardType == Utility.Screen.EDIT) {
+            homeWin = (TextView)itemView.findViewById(R.id.home_win);
+            draw = (TextView)itemView.findViewById(R.id.draw);
+            awayWin = (TextView)itemView.findViewById(R.id.away_win);
 
-            boolean clicked = false;
-
-            @Override
-            public void onClick(View v) {
-                if (clicked) {
-                    homeLogo.setBackgroundColor(Color.TRANSPARENT);
-                    clicked = false;
+            homeWin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Utility.games.get(getAdapterPosition()).getSelection() == Utility.Selection.HOME_WIN) {
+                        Utility.games.get(getAdapterPosition()).setSelection(Utility.Selection.NONE);
+                    }
+                    else {
+                        Utility.games.get(getAdapterPosition()).setSelection(Utility.Selection.HOME_WIN);
+                    }
+                    adapter.notifyItemChanged(getAdapterPosition());
                 }
-                else {
-                    homeLogo.setBackgroundColor(0xFFBDBDBD);
-                    draw.setBackgroundColor(Color.TRANSPARENT);
-                    awayLogo.setBackgroundColor(Color.TRANSPARENT);
-                    clicked = true;
+            });
+
+            draw.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Utility.games.get(getAdapterPosition()).getSelection() == Utility.Selection.DRAW) {
+                        Utility.games.get(getAdapterPosition()).setSelection(Utility.Selection.NONE);
+                    }
+                    else {
+                        Utility.games.get(getAdapterPosition()).setSelection(Utility.Selection.DRAW);
+                    }
+                    adapter.notifyItemChanged(getAdapterPosition());
                 }
-            }
-        });
+            });
 
-        awayLogo.setOnClickListener(new View.OnClickListener() {
-
-            boolean clicked = false;
-
-            @Override
-            public void onClick(View v) {
-                if (clicked) {
-                    awayLogo.setBackgroundColor(Color.TRANSPARENT);
-                    clicked = false;
+            awayWin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Utility.games.get(getAdapterPosition()).getSelection() == Utility.Selection.AWAY_WIN) {
+                        Utility.games.get(getAdapterPosition()).setSelection(Utility.Selection.NONE);
+                    }
+                    else {
+                        Utility.games.get(getAdapterPosition()).setSelection(Utility.Selection.AWAY_WIN);
+                    }
+                    adapter.notifyItemChanged(getAdapterPosition());
                 }
-                else {
-                    awayLogo.setBackgroundColor(0xFFBDBDBD);
-                    draw.setBackgroundColor(Color.TRANSPARENT);
-                    homeLogo.setBackgroundColor(Color.TRANSPARENT);
-                    clicked = true;
-                }
-            }
-        });
-
-        draw.setOnClickListener(new View.OnClickListener() {
-
-            boolean clicked = false;
-
-            @Override
-            public void onClick(View v) {
-                if (clicked) {
-                    draw.setBackgroundColor(Color.TRANSPARENT);
-                    clicked = false;
-                }
-                else {
-                    draw.setBackgroundColor(0xFFBDBDBD);
-                    homeLogo.setBackgroundColor(Color.TRANSPARENT);
-                    awayLogo.setBackgroundColor(Color.TRANSPARENT);
-                    clicked = true;
-                }
-            }
-        });*/
-
+            });
+        }
 
     }
 }

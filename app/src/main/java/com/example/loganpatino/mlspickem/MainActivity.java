@@ -26,6 +26,7 @@ import android.widget.ListAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean onMainScreen = true;
     Fragment mGameListFragment;
     Fragment mEditFragment;
+    private ArrayList<Game> games;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         // set icon
         final FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_lock_outline_white_24dp);
-
 
         fab.setOnClickListener(new View.OnClickListener() {
 

@@ -1,6 +1,7 @@
 package com.example.loganpatino.mlspickem;
 
 import java.text.DateFormatSymbols;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +30,20 @@ public class Utility {
     private static final String TORONTO = "Toronto FC";
     private static final String WHITECAPS = "Vancouver Whitecaps FC";
 
+    public enum Screen {
+        LIST,
+        EDIT
+    }
+
+    public enum Selection {
+        HOME_WIN,
+        DRAW,
+        AWAY_WIN,
+        NONE
+    }
+
+    public static ArrayList<Game> games;
+
     public static String getDateString(Game.Date date) {
         int day = date.getDay();
         int month = date.getMonth();
@@ -39,7 +54,11 @@ public class Utility {
     }
 
     public static String getTimeString(Game.Time time) {
-        return time.getHour() + ":" + time.getMinute() + " PM";
+        String minuteStr = "00";
+        if (time.getMinute() != 0) {
+            minuteStr = String.valueOf(time.getMinute());
+        }
+        return time.getHour() + ":" + minuteStr + " PM";
     }
 
     public static int getLogoResource(String teamName) {

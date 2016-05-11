@@ -31,4 +31,8 @@
     <string name="skc">Sporting Kansas City</string>
     <string name="toronto">Toronto FC</string>
     <string name="whitecaps">Vancouver Whitecaps FC</string>
+
+    <string name="your_pick">Your pick: </string>
+    <string name="win">Win</string>
+    <string name="draw">Draw</string>
 </resources>

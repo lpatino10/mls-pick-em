@@ -1,8 +1,9 @@
 package com.example.loganpatino.mlspickem;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,21 +17,34 @@ import java.util.List;
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MatchViewHolder> {
 
     private List<Game> matches;
+    private Utility.Screen cardType;
+    private Context context;
 
-    public MyRecyclerAdapter(List<Game> matches) {
+    public MyRecyclerAdapter(List<Game> matches, Utility.Screen cardType, Context context) {
         this.matches = new ArrayList<>();
         this.matches.addAll(matches);
+        this.cardType = cardType;
+        this.context = context;
     }
 
     @Override
     public MatchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view, parent, false);
-        return new MatchViewHolder(itemView);
+        View itemView;
+
+        if (cardType == Utility.Screen.LIST) {
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_card_view, parent, false);
+        }
+        else {
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.edit_card_view, parent, false);
+        }
+
+
+        return new MatchViewHolder(itemView, cardType, this);
     }
 
     @Override
-    public void onBindViewHolder(final MatchViewHolder holder, int position) {
-        Game matchup = matches.get(position);
+    public void onBindViewHolder(final MatchViewHolder holder, final int position) {
+        final Game matchup = matches.get(position);
         holder.homeLogo.setImageResource(Utility.getLogoResource(matchup.getHome()));
         holder.awayLogo.setImageResource(Utility.getLogoResource(matchup.getAway()));
         holder.date.setText(Utility.getDateString(matchup.getDate()));
@@ -39,27 +53,40 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MatchViewHolder> {
         int homeScore = matchup.getHomeScore();
         int awayScore = matchup.getAwayScore();
         if (homeScore != -1) {
-            String score = homeScore + "-" + awayScore;
+            String score = homeScore + " - " + awayScore;
             holder.score.setText(score);
         }
+        else {
+            holder.score.setText("vs.");
+        }
 
-        holder.homeLogo.setOnClickListener(new View.OnClickListener() {
-            boolean clicked = false;
+        if (cardType == Utility.Screen.EDIT) {
 
-            @Override
-            public void onClick(View v) {
-                if (clicked) {
-                    holder.homeLogo.setBackgroundColor(Color.TRANSPARENT);
-                    clicked = false;
-                }
-                else {
-                    holder.homeLogo.setBackgroundColor(0xFFBDBDBD);
-                    holder.draw.setBackgroundColor(Color.TRANSPARENT);
-                    holder.awayLogo.setBackgroundColor(Color.TRANSPARENT);
-                    clicked = true;
-                }
+            if (matchup.getSelection() == Utility.Selection.HOME_WIN) {
+                holder.homeWin.setSelected(true);
+                holder.draw.setSelected(false);
+                holder.awayWin.setSelected(false);
             }
-        });
+            else if (matchup.getSelection() == Utility.Selection.DRAW) {
+                holder.homeWin.setSelected(false);
+                holder.draw.setSelected(true);
+                holder.awayWin.setSelected(false);
+            }
+            else if (matchup.getSelection() == Utility.Selection.AWAY_WIN) {
+                holder.homeWin.setSelected(false);
+                holder.draw.setSelected(false);
+                holder.awayWin.setSelected(true);
+            }
+            else {
+                holder.homeWin.setSelected(false);
+                holder.draw.setSelected(false);
+                holder.awayWin.setSelected(false);
+            }
+
+        }
+
+
+
     }
 
     @Override
