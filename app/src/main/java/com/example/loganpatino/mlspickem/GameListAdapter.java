@@ -1,6 +1,7 @@
 package com.example.loganpatino.mlspickem;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +16,12 @@ import java.util.List;
 public class GameListAdapter extends RecyclerView.Adapter<GameListViewHolder> {
 
     private List<Game> matches;
+    private Context mContext;
 
-    public GameListAdapter(List<Game> matches) {
+    public GameListAdapter(List<Game> matches, Context context) {
         this.matches = new ArrayList<>();
         this.matches.addAll(matches);
+        mContext = context;
     }
 
     @Override
@@ -46,17 +49,24 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListViewHolder> {
             holder.score.setText("vs.");
         }
 
+        String userPick = mContext.getString(R.string.your_pick) + " ";
         if (matchup.getSelection() == Utility.Selection.HOME_WIN) {
-            holder.pick.setText("hw");
+            userPick = userPick + matchup.getHome();
+            holder.pick.setText(userPick);
         }
         else if (matchup.getSelection() == Utility.Selection.DRAW) {
-            holder.pick.setText("draw");
+            userPick = userPick + mContext
+                    .getString(R.string.draw);
+            holder.pick.setText(userPick);
         }
         else if (matchup.getSelection() == Utility.Selection.AWAY_WIN) {
-            holder.pick.setText("aw");
+            userPick = userPick + matchup.getAway();
+            holder.pick.setText(userPick);
         }
         else {
-            holder.pick.setText("none");
+            userPick = userPick + mContext
+                    .getString(R.string.none);
+            holder.pick.setText(userPick);
         }
 
 

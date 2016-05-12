@@ -35,4 +35,5 @@
     <string name="your_pick">Your pick: </string>
     <string name="win">Win</string>
     <string name="draw">Draw</string>
+    <string name="none">None</string>
 </resources>
