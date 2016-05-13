@@ -30,6 +30,9 @@ public class Utility {
     private static final String TORONTO = "Toronto FC";
     private static final String WHITECAPS = "Vancouver Whitecaps FC";
 
+    public static final String PREFS_FILE = "prefs";
+    public static final String KEYS = "keys";
+
     public enum Screen {
         LIST,
         EDIT
