@@ -72,7 +72,6 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListViewHolder> {
         }
 
         if (homeScore > awayScore) {
-            holder.awayLogo.setAlpha(0.3f);
             if (matchup.getSelection() == Utility.Selection.HOME_WIN) {
                 holder.pick.setTextColor(Color.GREEN);
             }
@@ -81,7 +80,6 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListViewHolder> {
             }
         }
         else if (awayScore > homeScore) {
-            holder.homeLogo.setAlpha(0.3f);
             if (matchup.getSelection() == Utility.Selection.AWAY_WIN) {
                 holder.pick.setTextColor(Color.GREEN);
             }
@@ -90,8 +88,6 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListViewHolder> {
             }
         }
         else if ((homeScore != -1) && (homeScore == awayScore)) {
-            holder.homeLogo.setAlpha(1.0f);
-            holder.awayLogo.setAlpha(1.0f);
             if (matchup.getSelection() == Utility.Selection.DRAW) {
                 holder.pick.setTextColor(Color.GREEN);
             }
@@ -100,8 +96,6 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListViewHolder> {
             }
         }
         else {
-            holder.homeLogo.setAlpha(1.0f);
-            holder.awayLogo.setAlpha(1.0f);
             holder.pick.setTextColor(ContextCompat.getColor(mContext, android.R.color.primary_text_light));
         }
 
