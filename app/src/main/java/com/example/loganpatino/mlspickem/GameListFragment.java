@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -38,6 +39,17 @@ public class GameListFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private Firebase mRef = new Firebase("https://mls-pick-em.firebaseio.com/");
+
+    public static GameListFragment newInstance(FloatingActionButton fab) {
+        GameListFragment gameListFragment = new GameListFragment();
+
+        Bundle args = new Bundle();
+        Gson gson = new Gson();
+        args.putSerializable("fab", gson.toJson(fab));
+        gameListFragment.setArguments(args);
+
+        return gameListFragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -1,7 +1,12 @@
 package com.example.loganpatino.mlspickem;
 
+import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
+import android.view.View;
+
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -33,11 +38,6 @@ public class Utility {
     public static final String PREFS_FILE = "prefs";
     public static final String KEYS = "keys";
 
-    public enum Screen {
-        LIST,
-        EDIT
-    }
-
     public enum Selection {
         HOME_WIN,
         DRAW,
@@ -62,6 +62,41 @@ public class Utility {
             minuteStr = String.valueOf(time.getMinute());
         }
         return time.getHour() + ":" + minuteStr + " PM";
+    }
+
+    public static boolean haveGamesStarted() {
+        boolean result = false;
+
+        Game.Date firstGameDate = Utility.games.get(0).getDate();
+        int firstGameYear = firstGameDate.getYear();
+        int firstGameMonth = firstGameDate.getMonth();
+        int firstGameDay = firstGameDate.getDay();
+        Game.Time firstGameTime = Utility.games.get(0).getTime();
+        int firstGameHour = firstGameTime.getHour() + 12;
+        int firstGameMin = firstGameTime.getMinute();
+
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH) + 1;
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int min = c.get(Calendar.MINUTE);
+
+        if ((year >= firstGameYear) && (month >= firstGameMonth) && (day > firstGameDay)) {
+            result = true;
+        }
+        else if ((year == firstGameYear) && (month == firstGameMonth) && (day == firstGameDay)) {
+            if (hour > firstGameHour) {
+                result = true;
+            }
+            else if (hour == firstGameHour) {
+                if (min >= firstGameMin) {
+                    result = true;
+                }
+            }
+        }
+
+        return result;
     }
 
     public static int getLogoResource(String teamName) {

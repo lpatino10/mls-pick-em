@@ -2,6 +2,8 @@ package com.example.loganpatino.mlspickem;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +48,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListViewHolder> {
             holder.score.setText(score);
         }
         else {
-            holder.score.setText("vs.");
+            holder.score.setText(mContext.getString(R.string.middle));
         }
 
         String userPick = mContext.getString(R.string.your_pick) + " ";
@@ -69,7 +71,39 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListViewHolder> {
             holder.pick.setText(userPick);
         }
 
-
+        if (homeScore > awayScore) {
+            holder.awayLogo.setAlpha(0.3f);
+            if (matchup.getSelection() == Utility.Selection.HOME_WIN) {
+                holder.pick.setTextColor(Color.GREEN);
+            }
+            else {
+                holder.pick.setTextColor(Color.RED);
+            }
+        }
+        else if (awayScore > homeScore) {
+            holder.homeLogo.setAlpha(0.3f);
+            if (matchup.getSelection() == Utility.Selection.AWAY_WIN) {
+                holder.pick.setTextColor(Color.GREEN);
+            }
+            else {
+                holder.pick.setTextColor(Color.RED);
+            }
+        }
+        else if ((homeScore != -1) && (homeScore == awayScore)) {
+            holder.homeLogo.setAlpha(1.0f);
+            holder.awayLogo.setAlpha(1.0f);
+            if (matchup.getSelection() == Utility.Selection.DRAW) {
+                holder.pick.setTextColor(Color.GREEN);
+            }
+            else {
+                holder.pick.setTextColor(Color.RED);
+            }
+        }
+        else {
+            holder.homeLogo.setAlpha(1.0f);
+            holder.awayLogo.setAlpha(1.0f);
+            holder.pick.setTextColor(ContextCompat.getColor(mContext, android.R.color.primary_text_light));
+        }
 
     }
 

@@ -27,7 +27,7 @@ public class EditFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
-        recyclerView.setAdapter(new EditListAdapter(Utility.games));
+        recyclerView.setAdapter(new EditListAdapter(Utility.games, getActivity().getApplicationContext()));
 
         return view;
     }

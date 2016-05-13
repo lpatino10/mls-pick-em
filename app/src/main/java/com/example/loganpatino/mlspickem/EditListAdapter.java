@@ -15,10 +15,12 @@ import java.util.List;
 public class EditListAdapter extends RecyclerView.Adapter<EditListViewHolder> {
 
     private List<Game> matches;
+    private Context mContext;
 
-    public EditListAdapter(List<Game> matches) {
+    public EditListAdapter(List<Game> matches, Context context) {
         this.matches = new ArrayList<>();
         this.matches.addAll(matches);
+        mContext = context;
     }
 
     @Override
@@ -43,7 +45,7 @@ public class EditListAdapter extends RecyclerView.Adapter<EditListViewHolder> {
             holder.score.setText(score);
         }
         else {
-            holder.score.setText("vs.");
+            holder.score.setText(mContext.getString(R.string.middle));
         }
 
         if (matchup.getSelection() == Utility.Selection.HOME_WIN) {

@@ -12,7 +12,9 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -41,10 +43,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private CoordinatorLayout mCoordinatorLayout;
     private boolean onMainScreen = true;
     Fragment mGameListFragment;
     Fragment mEditFragment;
-    private ArrayList<Game> games;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
+        mCoordinatorLayout = (CoordinatorLayout)findViewById(R.id.coordinator);
         mGameListFragment = new GameListFragment();
         mEditFragment = new EditFragment();
 
@@ -70,20 +73,34 @@ public class MainActivity extends AppCompatActivity {
 
         fab.setOnClickListener(new View.OnClickListener() {
 
-            //boolean clicked = false;
-
             @Override
             public void onClick(View v) {
-                if (onMainScreen) {
-                    fab.setImageResource(R.drawable.ic_lock_open_white_24dp);
-                    onMainScreen = false;
-                }
-                else {
-                    fab.setImageResource(R.drawable.ic_lock_outline_white_24dp);
-                    onMainScreen = true;
+                boolean haveGamesLoaded = false;
+                if (Utility.games.size() > 0) {
+                    haveGamesLoaded = true;
                 }
 
-                clickAction();
+                if ((haveGamesLoaded) && (!Utility.haveGamesStarted())) {
+
+                    if (onMainScreen) {
+                        fab.setImageResource(R.drawable.ic_lock_open_white_24dp);
+                        onMainScreen = false;
+                    }
+                    else {
+                        fab.setImageResource(R.drawable.ic_lock_outline_white_24dp);
+                        onMainScreen = true;
+                    }
+
+                    clickAction();
+                }
+                else {
+                    if (haveGamesLoaded) {
+                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout,
+                                "Games have already started!",
+                                Snackbar.LENGTH_SHORT);
+                        snackbar.show();
+                    }
+                }
             }
         });
 
