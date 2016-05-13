@@ -3,9 +3,12 @@ package com.example.loganpatino.mlspickem;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -38,18 +41,9 @@ import retrofit2.Response;
 public class GameListFragment extends Fragment {
 
     private RecyclerView recyclerView;
+    private RecyclerView.Adapter<GameListViewHolder> mAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private Firebase mRef = new Firebase("https://mls-pick-em.firebaseio.com/");
-
-    public static GameListFragment newInstance(FloatingActionButton fab) {
-        GameListFragment gameListFragment = new GameListFragment();
-
-        Bundle args = new Bundle();
-        Gson gson = new Gson();
-        args.putSerializable("fab", gson.toJson(fab));
-        gameListFragment.setArguments(args);
-
-        return gameListFragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,30 +51,7 @@ public class GameListFragment extends Fragment {
 
         if (Utility.games == null) {
             Utility.games = new ArrayList<>();
-
-            RestClient.GameInterface service = RestClient.getClient();
-            Call<CallResult> call = service.getSchedule();
-
-            call.enqueue(new Callback<CallResult>() {
-                @Override
-                public void onResponse(Call<CallResult> call, Response<CallResult> response) {
-                    if (response.isSuccessful()) {
-                        CallResult result = response.body();
-                        List<Game> tempGames = result.getGames();
-                        getCurrentWeek(tempGames);
-                        setDefaultPicks();
-                        getUserPicks();
-                    }
-                    else {
-                        Log.d(getClass().getSimpleName(), "Response unsuccessful!");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<CallResult> call, Throwable t) {
-                    Log.d(getClass().getSimpleName(), "Call failed!");
-                }
-            });
+            populateGameList();
         }
 
     }
@@ -90,11 +61,20 @@ public class GameListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game_list_layout, container, false);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipeContainer);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                populateGameList();
+            }
+        });
+
         recyclerView = (RecyclerView)view.findViewById(R.id.recyclerList);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
-        recyclerView.setAdapter(new GameListAdapter(Utility.games, getActivity().getApplicationContext()));
+        mAdapter = new GameListAdapter(Utility.games, getActivity().getApplicationContext());
+        recyclerView.setAdapter(mAdapter);
 
         return view;
     }
@@ -160,7 +140,8 @@ public class GameListFragment extends Fragment {
                     i++;
                 }
 
-                recyclerView.swapAdapter(new GameListAdapter(Utility.games, getActivity().getApplicationContext()), true);
+                mAdapter = new GameListAdapter(Utility.games, getActivity().getApplicationContext());
+                recyclerView.swapAdapter(mAdapter, true);
             }
 
             @Override
@@ -199,5 +180,35 @@ public class GameListFragment extends Fragment {
             }
         });
 
+    }
+
+    private void populateGameList() {
+        Utility.games.clear();
+
+        RestClient.GameInterface service = RestClient.getClient();
+        Call<CallResult> call = service.getSchedule();
+
+        call.enqueue(new Callback<CallResult>() {
+            @Override
+            public void onResponse(Call<CallResult> call, Response<CallResult> response) {
+                if (response.isSuccessful()) {
+                    CallResult result = response.body();
+                    List<Game> tempGames = result.getGames();
+                    getCurrentWeek(tempGames);
+                    setDefaultPicks();
+                    getUserPicks();
+
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+                else {
+                    Log.d(getClass().getSimpleName(), "Response unsuccessful!");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallResult> call, Throwable t) {
+                Log.d(getClass().getSimpleName(), "Call failed!");
+            }
+        });
     }
 }
