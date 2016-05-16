@@ -5,9 +5,13 @@ import android.util.Log;
 import android.view.View;
 
 import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by loganpatino on 4/16/16.
@@ -52,10 +56,25 @@ public class Utility {
     public static String getDateString(Game.Date date) {
         int day = date.getDay();
         int month = date.getMonth();
-
+        String yearString = String.valueOf(date.getYear());
+        String dayString = String.valueOf(date.getDay());
+        String monthStringNum = String.valueOf(date.getMonth());
         String monthString = new DateFormatSymbols().getMonths()[month-1];
 
-        return monthString + " " + day;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        SimpleDateFormat dayOfWeekFormat = new SimpleDateFormat("E", Locale.US);
+
+        Calendar c = Calendar.getInstance();
+        Date d = null;
+        try {
+            d = dateFormat.parse(dayString + "/" + monthStringNum + "/" + yearString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        c.setTime(d);
+        String dayOfWeek = dayOfWeekFormat.format(d);
+
+        return dayOfWeek + ", " + monthString + " " + day;
     }
 
     public static String getTimeString(Game.Time time) {
