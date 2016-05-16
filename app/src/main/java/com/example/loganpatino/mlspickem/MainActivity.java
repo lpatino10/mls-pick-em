@@ -125,15 +125,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void savePicks() {
         SharedPreferences sharedPreferences = getSharedPreferences(Utility.PREFS_FILE, Context.MODE_PRIVATE);
-        String keyList = sharedPreferences.getString(Utility.KEYS, null);
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        Gson gson = gsonBuilder.create();
-        String[] keys = gson.fromJson(keyList, String[].class);
+        String id = sharedPreferences.getString(Utility.LOGIN_ID, null);
 
-        Firebase ref = new Firebase("https://mls-pick-em.firebaseio.com/");
+        Firebase ref = new Firebase("https://mls-pick-em.firebaseio.com/" + id);
+
+        ref.setValue(null);
+
         for (int i = 0; i < Utility.games.size(); i++) {
             Utility.Selection currentSelection = Utility.games.get(i).getSelection();
-            String pushVal = null;
+            String pushVal;
 
             if (currentSelection == Utility.Selection.HOME_WIN) {
                 pushVal = "Home Win";
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             else {
                 pushVal = "None";
             }
-            ref.child(keys[i]).setValue(pushVal);
+            ref.push().setValue(pushVal);
         }
     }
 }

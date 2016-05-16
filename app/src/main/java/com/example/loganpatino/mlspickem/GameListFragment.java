@@ -44,16 +44,19 @@ public class GameListFragment extends Fragment {
     private RecyclerView.Adapter<GameListViewHolder> mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Firebase mRef = new Firebase("https://mls-pick-em.firebaseio.com/");
+    private String mId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Utility.PREFS_FILE, Context.MODE_PRIVATE);
+        mId = sharedPreferences.getString(Utility.LOGIN_ID, null);
+
         if (Utility.games == null) {
             Utility.games = new ArrayList<>();
             populateGameList();
         }
-
     }
 
     @Nullable
@@ -80,6 +83,10 @@ public class GameListFragment extends Fragment {
     }
 
     private void getCurrentWeek(List<Game> tempGames) {
+        Utility.games.clear();
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Utility.PREFS_FILE, Context.MODE_PRIVATE);
+        String oldFirstDate = sharedPreferences.getString(Utility.FIRST_GAME_DATE, null);
+
         Date currentDate = new Date(); // initializes to current date
         Calendar currentCal = new GregorianCalendar();
         Calendar nextWeek = new GregorianCalendar(2016, Calendar.MARCH, 7); // first Monday
@@ -113,16 +120,27 @@ public class GameListFragment extends Fragment {
                 Utility.games.add(currentGame);
             }
         }
+
+        String newFirstDate = Utility.getDateString(Utility.games.get(0).getDate());
+        if ((oldFirstDate != null) && !oldFirstDate.equals(newFirstDate)) {
+            clearUserPicks();
+        }
+
+        oldFirstDate = Utility.getDateString(Utility.games.get(0).getDate());
+        sharedPreferences.edit().putString(Utility.FIRST_GAME_DATE, oldFirstDate).apply();
     }
 
     private void getUserPicks() {
+        String userUrl = "https://mls-pick-em.firebaseio.com/" + mId;
+        final Firebase userRef = new Firebase(userUrl);
 
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 int i = 0;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
                     switch (snapshot.getValue().toString()) {
                         case "Home Win":
                             Utility.games.get(i).setSelection(Utility.Selection.HOME_WIN);
@@ -153,23 +171,25 @@ public class GameListFragment extends Fragment {
     }
 
     private void setDefaultPicks() {
-
         final ArrayList<String> keys = new ArrayList<>();
+
+        String userUrl = "https://mls-pick-em.firebaseio.com/" + mId;
+        final Firebase userRef = new Firebase(userUrl);
+
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getChildrenCount() == 0) {
-                    for (int i = 0; i < Utility.games.size(); i++) {
-                        Firebase newRef = mRef.push();
-                        newRef.setValue("None");
-                        Log.d("getKeyTest", newRef.getKey());
-                        keys.add(newRef.getKey());
+                boolean isIdSaved = false;
 
-                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Utility.PREFS_FILE, Context.MODE_PRIVATE);
-                        Gson gson = new Gson();
-                        String keyList = gson.toJson(keys);
-                        Log.d("SAVE_TEST", keyList);
-                        sharedPreferences.edit().putString(Utility.KEYS, keyList).apply();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if (snapshot.getKey().equals(mId)) {
+                        isIdSaved = true;
+                    }
+                }
+
+                if (!isIdSaved) {
+                    for (int i = 0; i < Utility.games.size(); i++) {
+                        userRef.push().setValue("None");
                     }
                 }
             }
@@ -183,8 +203,6 @@ public class GameListFragment extends Fragment {
     }
 
     private void populateGameList() {
-        Utility.games.clear();
-
         RestClient.GameInterface service = RestClient.getClient();
         Call<CallResult> call = service.getSchedule();
 
@@ -210,5 +228,9 @@ public class GameListFragment extends Fragment {
                 Log.d(getClass().getSimpleName(), "Call failed!");
             }
         });
+    }
+
+    private void clearUserPicks() {
+        mRef.setValue(mId, null);
     }
 }

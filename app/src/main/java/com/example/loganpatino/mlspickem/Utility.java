@@ -36,7 +36,9 @@ public class Utility {
     private static final String WHITECAPS = "Vancouver Whitecaps FC";
 
     public static final String PREFS_FILE = "prefs";
-    public static final String KEYS = "keys";
+    public static final String LOGIN_ID = "id";
+    public static final String FIRST_GAME_DATE = "date";
+    public static final String IS_USER_LOGGED_IN = "login";
 
     public enum Selection {
         HOME_WIN,
