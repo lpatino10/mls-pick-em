@@ -171,8 +171,6 @@ public class GameListFragment extends Fragment {
     }
 
     private void setDefaultPicks() {
-        final ArrayList<String> keys = new ArrayList<>();
-
         String userUrl = "https://mls-pick-em.firebaseio.com/" + mId;
         final Firebase userRef = new Firebase(userUrl);
 
