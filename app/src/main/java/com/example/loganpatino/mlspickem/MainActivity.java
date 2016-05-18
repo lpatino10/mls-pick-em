@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean onMainScreen = true;
     Fragment mGameListFragment;
     Fragment mEditFragment;
+    private final String PICKS_PATH = "picks";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
         Firebase ref = new Firebase("https://mls-pick-em.firebaseio.com/");
         assert id != null;
-        Firebase userRef = ref.child(id);
+        Firebase userRef = ref.child(PICKS_PATH).child(id);
 
         for (int i = 0; i < Utility.games.size(); i++) {
             Utility.Selection currentSelection = Utility.games.get(i).getSelection();

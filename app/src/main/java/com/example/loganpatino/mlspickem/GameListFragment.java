@@ -17,6 +17,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -25,9 +26,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,6 +46,7 @@ public class GameListFragment extends Fragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Firebase mRef = new Firebase("https://mls-pick-em.firebaseio.com/");
     private String mId;
+    private final String PICKS_PATH = "picks";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -132,7 +136,7 @@ public class GameListFragment extends Fragment {
     }
 
     private void getUserPicks() {
-        final Firebase userRef = mRef.child(mId);
+        final Firebase userRef = mRef.child(PICKS_PATH).child(mId);
 
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -171,9 +175,10 @@ public class GameListFragment extends Fragment {
     }
 
     private void setDefaultPicks() {
-        final Firebase userRef = mRef.child(mId);
+        Firebase picksRef = mRef.child(PICKS_PATH);
+        final Firebase userRef = picksRef.child(mId);
 
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        picksRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean isIdSaved = false;
@@ -231,11 +236,12 @@ public class GameListFragment extends Fragment {
     }
 
     private void clearUserPicks() {
-        Firebase userRef = mRef.child(mId);
+        Firebase userRef = mRef.child(PICKS_PATH).child(mId);
         for (int i = 0; i < Utility.games.size(); i++) {
             String key = Utility.getKeyFromGame(i);
             userRef.child(key).removeValue();
         }
         Log.d("DEBUG", "user picks have been cleared");
     }
+
 }
