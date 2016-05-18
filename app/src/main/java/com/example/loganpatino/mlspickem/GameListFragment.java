@@ -3,11 +3,8 @@ package com.example.loganpatino.mlspickem;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +17,6 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.google.gson.Gson;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -28,8 +24,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -71,6 +69,7 @@ public class GameListFragment extends Fragment {
                 populateGameList();
             }
         });
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
         recyclerView = (RecyclerView)view.findViewById(R.id.recyclerList);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
@@ -121,7 +120,9 @@ public class GameListFragment extends Fragment {
             }
         }
 
+        // CHECK THIS TO MAKE SURE IT'S CORRECT
         String newFirstDate = Utility.getDateString(Utility.games.get(0).getDate());
+        Log.d("TIME_TEST", "oldFirstDate: " + oldFirstDate + "  newFirstDate: " + newFirstDate);
         if ((oldFirstDate != null) && !oldFirstDate.equals(newFirstDate)) {
             clearUserPicks();
         }
@@ -131,31 +132,30 @@ public class GameListFragment extends Fragment {
     }
 
     private void getUserPicks() {
-        String userUrl = "https://mls-pick-em.firebaseio.com/" + mId;
-        final Firebase userRef = new Firebase(userUrl);
+        final Firebase userRef = mRef.child(mId);
 
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                int i = 0;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                    Game currentGame = Utility.getGameFromKey(snapshot.getKey());
+                    assert currentGame != null;
 
                     switch (snapshot.getValue().toString()) {
                         case "Home Win":
-                            Utility.games.get(i).setSelection(Utility.Selection.HOME_WIN);
+                            currentGame.setSelection(Utility.Selection.HOME_WIN);
                             break;
                         case "Draw":
-                            Utility.games.get(i).setSelection(Utility.Selection.DRAW);
+                            currentGame.setSelection(Utility.Selection.DRAW);
                             break;
                         case "Away Win":
-                            Utility.games.get(i).setSelection(Utility.Selection.AWAY_WIN);
+                            currentGame.setSelection(Utility.Selection.AWAY_WIN);
                             break;
                         default:
-                            Utility.games.get(i).setSelection(Utility.Selection.NONE);
+                            currentGame.setSelection(Utility.Selection.NONE);
                     }
-
-                    i++;
                 }
 
                 mAdapter = new GameListAdapter(Utility.games, getActivity().getApplicationContext());
@@ -171,8 +171,7 @@ public class GameListFragment extends Fragment {
     }
 
     private void setDefaultPicks() {
-        String userUrl = "https://mls-pick-em.firebaseio.com/" + mId;
-        final Firebase userRef = new Firebase(userUrl);
+        final Firebase userRef = mRef.child(mId);
 
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -187,7 +186,10 @@ public class GameListFragment extends Fragment {
 
                 if (!isIdSaved) {
                     for (int i = 0; i < Utility.games.size(); i++) {
-                        userRef.push().setValue("None");
+                        String key = Utility.getKeyFromGame(i);
+                        Map<String, Object> pick = new HashMap<>();
+                        pick.put(key, "None");
+                        userRef.updateChildren(pick);
                     }
                 }
             }
@@ -229,6 +231,11 @@ public class GameListFragment extends Fragment {
     }
 
     private void clearUserPicks() {
-        mRef.setValue(mId, null);
+        Firebase userRef = mRef.child(mId);
+        for (int i = 0; i < Utility.games.size(); i++) {
+            String key = Utility.getKeyFromGame(i);
+            userRef.child(key).removeValue();
+        }
+        Log.d("DEBUG", "user picks have been cleared");
     }
 }

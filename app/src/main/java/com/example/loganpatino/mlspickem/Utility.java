@@ -22,6 +22,7 @@ public class Utility {
     private static final String RAPIDS = "Colorado Rapids";
     private static final String CREW = "Columbus Crew SC";
     private static final String DC = "D.C. United";
+    private static final String DC_NO_PERIODS = "DC United";
     private static final String DALLAS = "FC Dallas";
     private static final String DYNAMO = "Houston Dynamo";
     private static final String GALAXY = "LA Galaxy";
@@ -189,6 +190,43 @@ public class Utility {
         }
 
         return id;
+    }
+
+    public static String getKeyFromGame(int i) {
+        String home = games.get(i).getHome();
+        String away = games.get(i).getAway();
+
+        if (home.equals(DC)) {
+            home = DC_NO_PERIODS;
+        }
+        else if (away.equals(DC)) {
+            away = DC_NO_PERIODS;
+        }
+
+        String key = home + "_" + away;;
+        return key;
+    }
+
+    public static Game getGameFromKey(String key) {
+        int separator = key.indexOf('_');
+        String home = key.substring(0, separator);
+        String away = key.substring(separator+1);
+
+        if (home.equals(DC_NO_PERIODS)) {
+            home = DC;
+        }
+        else if (away.equals(DC_NO_PERIODS)) {
+            away = DC;
+        }
+
+        for (int i = 0; i < games.size(); i++) {
+            Game currentGame = games.get(i);
+            if ((currentGame.getHome().equals(home)) && (currentGame.getAway().equals(away))) {
+                return currentGame;
+            }
+        }
+
+        return null;
     }
 
 }

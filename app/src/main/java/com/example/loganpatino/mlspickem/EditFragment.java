@@ -21,7 +21,7 @@ public class EditFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_game_list_layout, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_list_layout, container, false);
 
         recyclerView = (RecyclerView)view.findViewById(R.id.recyclerList);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
