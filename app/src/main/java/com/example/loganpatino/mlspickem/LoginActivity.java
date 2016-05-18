@@ -3,6 +3,7 @@ package com.example.loganpatino.mlspickem;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,7 +33,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         mSharedPreferences = getSharedPreferences(Utility.PREFS_FILE, Context.MODE_PRIVATE);
         if (mSharedPreferences.getBoolean(Utility.IS_USER_LOGGED_IN, false)) {
-            startActivity(new Intent(this, MainActivity.class));
+            mSharedPreferences.edit().putBoolean(Utility.IS_USER_LOGGED_IN, false).apply();
+            //startActivity(new Intent(this, MainActivity.class));
         }
 
         // Configure sign-in to request the user's ID, email address, and basic
@@ -82,6 +84,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
             String userId = acct.getId();
+            Uri profilePic = acct.getPhotoUrl();
+            String userName = acct.getDisplayName();
             saveId(userId);
             saveLoginStatus();
             startActivity(new Intent(this, MainActivity.class));

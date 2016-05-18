@@ -45,6 +45,8 @@ public class Utility {
     public static final String FIRST_GAME_DATE = "date";
     public static final String IS_USER_LOGGED_IN = "login";
 
+    public static int gameCount;
+
     public enum Selection {
         HOME_WIN,
         DRAW,

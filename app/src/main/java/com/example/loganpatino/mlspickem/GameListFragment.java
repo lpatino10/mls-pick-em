@@ -104,6 +104,7 @@ public class GameListFragment extends Fragment {
         lastWeek.setTime(nextWeek.getTime());
         lastWeek.add(Calendar.WEEK_OF_YEAR, -1); // lastWeek is 1 week before nextWeek
 
+        int gameCount = 0;
         for (int i = 0; i < tempGames.size(); i++) {
             Game currentGame = tempGames.get(i);
             DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.ENGLISH); // sets numeric date with English format
@@ -119,12 +120,24 @@ public class GameListFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            if (date.before(nextWeek.getTime()) && date.after(lastWeek.getTime())) { // if game is this week
+            if (date.before(lastWeek.getTime())) {
+                gameCount++;
+            }
+            else if (date.before(nextWeek.getTime()) && date.after(lastWeek.getTime())) { // if game is this week
                 Utility.games.add(currentGame);
+            }
+            else if (date.after(nextWeek.getTime())) {
+                break;
             }
         }
 
-        // CHECK THIS TO MAKE SURE IT'S CORRECT
+        for (int i = 0; i < Utility.games.size(); i++) {
+            if (Utility.games.get(i).getHomeScore() != -1) {
+                gameCount++;
+            }
+        }
+        Utility.gameCount = gameCount;
+
         String newFirstDate = Utility.getDateString(Utility.games.get(0).getDate());
         Log.d("TIME_TEST", "oldFirstDate: " + oldFirstDate + "  newFirstDate: " + newFirstDate);
         if ((oldFirstDate != null) && !oldFirstDate.equals(newFirstDate)) {
