@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mSharedPreferences = getSharedPreferences(Utility.PREFS_FILE, Context.MODE_PRIVATE);
         if (mSharedPreferences.getBoolean(Utility.IS_USER_LOGGED_IN, false)) {
             mSharedPreferences.edit().putBoolean(Utility.IS_USER_LOGGED_IN, false).apply();
-            //startActivity(new Intent(this, MainActivity.class));
+            //startActivity(new Intent(this, HomeFragment.class));
         }
 
         // Configure sign-in to request the user's ID, email address, and basic
@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             String userName = acct.getDisplayName();
             saveId(userId);
             saveLoginStatus();
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, NavigationDrawerActivity.class));
         } else {
             Log.d("LOGIN_TEST", "DIDNT WORK");
         }

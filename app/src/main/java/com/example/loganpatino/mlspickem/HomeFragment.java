@@ -5,12 +5,14 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity {
+public class HomeFragment extends Fragment {
 
     private CoordinatorLayout mCoordinatorLayout;
     private boolean onMainScreen = true;
@@ -27,17 +29,16 @@ public class MainActivity extends AppCompatActivity {
     Fragment mEditFragment;
     private final String PICKS_PATH = "picks";
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_main, container, false);
 
-        mCoordinatorLayout = (CoordinatorLayout)findViewById(R.id.coordinator);
+        mCoordinatorLayout = (CoordinatorLayout)view.findViewById(R.id.coordinator);
         mGameListFragment = new GameListFragment();
         mEditFragment = new EditFragment();
 
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getChildFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.content_frame);
 
         if (fragment == null) {
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // set icon
-        final FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_lock_outline_white_24dp);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        return view;
     }
 
     public void clickAction() {
@@ -103,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void savePicks() {
-        SharedPreferences sharedPreferences = getSharedPreferences(Utility.PREFS_FILE, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Utility.PREFS_FILE, Context.MODE_PRIVATE);
         String id = sharedPreferences.getString(Utility.LOGIN_ID, null);
 
         DatabaseReference picksRef = FirebaseDatabase.getInstance().getReference().child(PICKS_PATH);
