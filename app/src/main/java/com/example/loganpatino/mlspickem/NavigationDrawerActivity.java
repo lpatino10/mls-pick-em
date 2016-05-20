@@ -93,7 +93,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 fragmentClass = HomeFragment.class;
                 break;
             case R.id.leaderboard:
-                fragmentClass = HomeFragment.class;
+                fragmentClass = LeaderboardFragment.class;
                 break;
             default:
                 fragmentClass = HomeFragment.class;

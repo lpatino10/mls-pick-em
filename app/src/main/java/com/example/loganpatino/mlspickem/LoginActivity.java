@@ -16,6 +16,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -88,6 +96,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             String userName = acct.getDisplayName();
             saveId(userId);
             saveLoginStatus();
+            saveProfileInfo(profilePic, userName, userId);
             startActivity(new Intent(this, NavigationDrawerActivity.class));
         } else {
             Log.d("LOGIN_TEST", "DIDNT WORK");
@@ -100,6 +109,23 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void saveLoginStatus() {
         mSharedPreferences.edit().putBoolean(Utility.IS_USER_LOGGED_IN, true).apply();
+    }
+
+    private void saveProfileInfo(Uri profilePic, String userName, String userId) {
+        String profilePicString = String.valueOf(profilePic);
+
+        DatabaseReference profileRef = FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child("profiles")
+                .child(userId);
+
+        Map<String, Object> profileInfo = new HashMap<>();
+        profileInfo.put("name", userName);
+        profileInfo.put("profilePic", profilePicString);
+        profileInfo.put("correctPicks", 0);
+
+        profileRef.updateChildren(profileInfo);
     }
 }
 
