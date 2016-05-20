@@ -13,10 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.text.DateFormat;
@@ -26,11 +27,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,9 +43,9 @@ public class GameListFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter<GameListViewHolder> mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private Firebase mRef = new Firebase("https://mls-pick-em.firebaseio.com/");
+    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference mPicksRef = mRootRef.child("picks");
     private String mId;
-    private final String PICKS_PATH = "picks";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -149,7 +148,7 @@ public class GameListFragment extends Fragment {
     }
 
     private void getUserPicks() {
-        final Firebase userRef = mRef.child(PICKS_PATH).child(mId);
+        DatabaseReference userRef = mPicksRef.child(mId);
 
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -180,18 +179,16 @@ public class GameListFragment extends Fragment {
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
-
     }
 
     private void setDefaultPicks() {
-        Firebase picksRef = mRef.child(PICKS_PATH);
-        final Firebase userRef = picksRef.child(mId);
+        final DatabaseReference userRef = mPicksRef.child(mId);
 
-        picksRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mPicksRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean isIdSaved = false;
@@ -213,11 +210,10 @@ public class GameListFragment extends Fragment {
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError firebaseError) {
 
             }
         });
-
     }
 
     private void populateGameList() {
@@ -249,7 +245,7 @@ public class GameListFragment extends Fragment {
     }
 
     private void clearUserPicks() {
-        Firebase userRef = mRef.child(PICKS_PATH).child(mId);
+        DatabaseReference userRef = mPicksRef.child(mId);
         for (int i = 0; i < Utility.games.size(); i++) {
             String key = Utility.getKeyFromGame(i);
             userRef.child(key).removeValue();

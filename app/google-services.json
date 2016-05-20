@@ -1,33 +1,27 @@
 {
   "project_info": {
-    "project_number": "838001139384",
-    "project_id": "mls-pickem"
+    "project_number": "955349549834",
+    "firebase_url": "https://mls-pick-em.firebaseio.com",
+    "project_id": "mls-pick-em",
+    "storage_bucket": "mls-pick-em.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:838001139384:android:513029fb27536375",
+        "mobilesdk_app_id": "1:955349549834:android:513029fb27536375",
         "android_client_info": {
           "package_name": "com.example.loganpatino.mlspickem"
         }
       },
       "oauth_client": [
         {
-          "client_id": "838001139384-ff8v804b9h2rkkrqb9u44gaat0t8j2ib.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.loganpatino.mlspickem",
-            "certificate_hash": "42DA5144AEDA14FBA922BA2D7458D92734DEB53E"
-          }
-        },
-        {
-          "client_id": "838001139384-ns217u9tmfgpsvkennnr3q6dug4cscqd.apps.googleusercontent.com",
+          "client_id": "955349549834-0fvpm7rn8hjgrom1rmb7srl7vuq391gq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB7m3RKF81jVOvqOU_GcjP2B4R-DQfun2A"
+          "current_key": "AIzaSyC0p6ZMUq-dul-RFMMlafku-WxT6p2_o3I"
         }
       ],
       "services": {
@@ -39,7 +33,7 @@
           "other_platform_oauth_client": []
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.firebase.client.Firebase;
-
 /**
  * Created by loganpatino on 4/12/16.
  */

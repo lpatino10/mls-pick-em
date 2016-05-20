@@ -12,7 +12,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.firebase.client.Firebase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -105,9 +106,9 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(Utility.PREFS_FILE, Context.MODE_PRIVATE);
         String id = sharedPreferences.getString(Utility.LOGIN_ID, null);
 
-        Firebase ref = new Firebase("https://mls-pick-em.firebaseio.com/");
+        DatabaseReference picksRef = FirebaseDatabase.getInstance().getReference().child(PICKS_PATH);
         assert id != null;
-        Firebase userRef = ref.child(PICKS_PATH).child(id);
+        DatabaseReference userRef = picksRef.child(id);
 
         for (int i = 0; i < Utility.games.size(); i++) {
             Utility.Selection currentSelection = Utility.games.get(i).getSelection();
