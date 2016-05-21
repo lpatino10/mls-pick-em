@@ -174,6 +174,8 @@ public class GameListFragment extends Fragment {
                     }
                 }
 
+                updateCorrectPicks();
+
                 mAdapter = new GameListAdapter(Utility.games, getActivity().getApplicationContext());
                 recyclerView.swapAdapter(mAdapter, true);
             }
@@ -251,6 +253,43 @@ public class GameListFragment extends Fragment {
             userRef.child(key).removeValue();
         }
         Log.d("DEBUG", "user picks have been cleared");
+    }
+
+    private void updateCorrectPicks() {
+        DatabaseReference picksRef = mRootRef.child("profiles").child(mId);
+        int newCorrectCount = 0;
+
+        for (int i = 0; i < Utility.games.size(); i++) {
+            Game currentGame = Utility.games.get(i);
+            int homeScore = currentGame.getHomeScore();
+            int awayScore = currentGame.getAwayScore();
+
+            if (homeScore > awayScore) {
+                if (currentGame.getSelection() == Utility.Selection.HOME_WIN) {
+                    newCorrectCount++;
+                }
+            }
+            else if (awayScore > homeScore) {
+                if (currentGame.getSelection() == Utility.Selection.AWAY_WIN) {
+                    newCorrectCount++;
+                }
+            }
+            else if ((homeScore == awayScore) && (homeScore > -1)) {
+                if (currentGame.getSelection() == Utility.Selection.DRAW) {
+                    newCorrectCount++;
+                }
+            }
+        }
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Utility.PREFS_FILE, Context.MODE_PRIVATE);
+        int storedCorrectCount = sharedPreferences.getInt(Utility.CURRENT_WEEK_CORRECT_PICKS, 0);
+
+        if (newCorrectCount > storedCorrectCount) {
+            Map<String, Object> correctPicks = new HashMap<>();
+            correctPicks.put("correctPicks", newCorrectCount);
+            picksRef.updateChildren(correctPicks);
+            sharedPreferences.edit().putInt(Utility.CURRENT_WEEK_CORRECT_PICKS, newCorrectCount).apply();
+        }
     }
 
 }

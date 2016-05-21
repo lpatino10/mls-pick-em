@@ -44,6 +44,7 @@ public class Utility {
     public static final String LOGIN_ID = "id";
     public static final String FIRST_GAME_DATE = "date";
     public static final String IS_USER_LOGGED_IN = "login";
+    public static final String CURRENT_WEEK_CORRECT_PICKS = "picks";
 
     public static int gameCount;
 
