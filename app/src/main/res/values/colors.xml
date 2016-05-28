@@ -3,4 +3,9 @@
     <item name="colorPrimary" type="color">#F44336</item>
     <item name="colorPrimaryDark" type="color">#D32F2F</item>
     <item name="colorAccent" type="color">#448AFF</item>
+    <item name="background" type="color">#FAFAFA</item>
+    <item name="cardBackground" type="color">#FFFFFF</item>
+    <item name="primaryText" type="color">#de000000</item>
+    <item name="secondaryText" type="color">#8a000000</item>
+    <item name="dividerColor" type="color">#41000000</item>
 </resources>

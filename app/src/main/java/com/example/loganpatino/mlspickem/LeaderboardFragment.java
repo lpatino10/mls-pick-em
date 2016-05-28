@@ -2,8 +2,10 @@ package com.example.loganpatino.mlspickem;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,8 +20,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.BufferedInputStream;
@@ -28,12 +33,27 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LeaderboardFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private FirebaseRecyclerAdapter<Profile, LeaderboardViewHolder> mRecyclerAdapter;
-    private DatabaseReference mProfileRef = FirebaseDatabase.getInstance().getReference().child("profiles");
+    private DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference mProfileRef = mRootRef.child("profiles");
+    private DatabaseReference mPicksRef = mRootRef.child("picks");
+    private static Context mContext;
+    private String mId;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext = getActivity().getApplicationContext();
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Utility.PREFS_FILE, Context.MODE_PRIVATE);
+        mId = sharedPreferences.getString(Utility.LOGIN_ID, null);
+        updateCorrectPicks();
+    }
 
     @Nullable
     @Override
@@ -48,13 +68,11 @@ public class LeaderboardFragment extends Fragment {
         mRecyclerAdapter = new FirebaseRecyclerAdapter<Profile, LeaderboardViewHolder>(Profile.class, R.layout.leaderboard_item_view, LeaderboardViewHolder.class, mProfileRef) {
             @Override
             protected void populateViewHolder(LeaderboardViewHolder leaderboardViewHolder, Profile profile, int i) {
-                leaderboardViewHolder.setContext(getActivity().getApplicationContext());
                 leaderboardViewHolder.setProfilePic(profile.getProfilePic());
                 leaderboardViewHolder.setName(profile.getName());
-                leaderboardViewHolder.setCorrectPicks(profile.getCorrectPicks());
+                leaderboardViewHolder.setCorrectPicks(profile.getTotalCorrectPicks());
             }
         };
-
         mRecyclerView.setAdapter(mRecyclerAdapter);
 
         return view;
@@ -66,12 +84,59 @@ public class LeaderboardFragment extends Fragment {
         mRecyclerAdapter.cleanup();
     }
 
+    private void updateCorrectPicks() {
+        mPicksRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int newThisWeekCorrectPicks = 0;
+                for (DataSnapshot idSnapshot : dataSnapshot.getChildren()) {
+                    for (DataSnapshot pickSnapshot : idSnapshot.getChildren()) {
+                        String gameKey = pickSnapshot.getKey();
+                        Log.d("KEY_TEST", gameKey);
+                        Utility.Selection gamePick = Utility.getSelectionFromString(pickSnapshot.getValue(String.class));
+                        Game currentGame = Utility.getGameFromKey(gameKey);
+
+                        if (Utility.getTextColorFromSelection(currentGame, gamePick) == Color.GREEN) {
+                            newThisWeekCorrectPicks++;
+                        }
+                    }
+
+                    final int finalNewThisWeekCorrectPicks = newThisWeekCorrectPicks;
+                    final DatabaseReference userProfileRef = mProfileRef.child(mId);
+                    userProfileRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Profile userProfile = dataSnapshot.getValue(Profile.class);
+                            int oldTotalCorrectPicks = userProfile.getTotalCorrectPicks();
+                            int newTotalCorrectPicks = finalNewThisWeekCorrectPicks + userProfile.getPreviousCorrectPicks();
+
+                            if (newTotalCorrectPicks > oldTotalCorrectPicks) {
+                                Map<String, Object> updateMap = new HashMap<>();
+                                updateMap.put("totalCorrectPicks", newTotalCorrectPicks);
+                                userProfileRef.updateChildren(updateMap);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private static class LeaderboardViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView profilePic;
         private TextView name;
         private TextView correctPicks;
-        private Context context;
 
         public LeaderboardViewHolder(View itemView) {
             super(itemView);
@@ -81,11 +146,7 @@ public class LeaderboardFragment extends Fragment {
         }
 
         public void setProfilePic(String profilePic) {
-            Picasso.with(context).load(profilePic).into(this.profilePic);
-        }
-
-        public void setContext(Context context) {
-            this.context = context;
+            Picasso.with(mContext).load(profilePic).into(this.profilePic);
         }
 
         public void setName(String name) {
@@ -93,7 +154,8 @@ public class LeaderboardFragment extends Fragment {
         }
 
         public void setCorrectPicks(int correctPicks) {
-            this.correctPicks.setText(String.valueOf(correctPicks));
+            String correctPickStr = correctPicks + "/" + Utility.totalGamesPlayed;
+            this.correctPicks.setText(correctPickStr);
         }
     }
 }

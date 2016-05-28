@@ -13,14 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:divider="?android:listDivider"
+        android:divider="@color/dividerColor"
         android:showDividers="middle">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="?android:listDivider"
+            android:divider="@color/dividerColor"
             android:showDividers="middle">
 
             <TextView
@@ -139,7 +139,8 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/date"
-                    android:id="@+id/date_string" />
+                    android:id="@+id/date_string"
+                    android:textIsSelectable="true"/>
             </RelativeLayout>
 
             <RelativeLayout

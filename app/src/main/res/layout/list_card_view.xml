@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
   <android.support.v7.widget.CardView
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/card"
-    android:layout_height="200dp"
-    android:layout_width="match_parent"
-    android:layout_margin="5dp"
-    android:background="#00ffffff">
+      xmlns:card_view="http://schemas.android.com/apk/res-auto"
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/card"
+      android:layout_height="200dp"
+      android:layout_width="match_parent"
+      android:layout_margin="5dp"
+      style="@style/CardView.Light">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:divider="?android:listDivider"
+        android:divider="@color/dividerColor"
         android:showDividers="middle">
 
         <TextView
@@ -24,13 +24,15 @@
             android:id="@+id/pick"
             android:gravity="center"
             android:paddingTop="15dp"
-            android:paddingBottom="15dp"/>
+            android:paddingBottom="15dp"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:baselineAligned="false">
+            android:baselineAligned="false"
+            >
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -47,8 +49,7 @@
                     android:clickable="true"
                     android:nestedScrollingEnabled="false"
                     android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:background="@drawable/background_selector"/>
+                    android:layout_alignParentStart="true"/>
 
             </RelativeLayout>
 
@@ -65,7 +66,8 @@
                     android:text="@string/middle"
                     android:id="@+id/score_text"
                     android:gravity="center"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/secondaryText"/>
 
             </RelativeLayout>
 
@@ -107,7 +109,8 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/date"
-                    android:id="@+id/date_string" />
+                    android:id="@+id/date_string"
+                    android:textColor="@color/secondaryText"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -121,7 +124,8 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/time"
-                    android:id="@+id/time_string" />
+                    android:id="@+id/time_string"
+                    android:textColor="@color/secondaryText"/>
             </RelativeLayout>
 
         </LinearLayout>

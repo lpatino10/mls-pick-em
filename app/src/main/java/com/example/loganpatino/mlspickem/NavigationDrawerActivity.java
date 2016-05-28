@@ -3,6 +3,8 @@ package com.example.loganpatino.mlspickem;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +14,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,6 +49,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
+
+        getDateRange();
     }
 
     @Override
@@ -113,5 +131,30 @@ public class NavigationDrawerActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void getDateRange() {
+        java.util.Date currentDate = new java.util.Date(); // initializes to current date
+        Calendar currentCal = new GregorianCalendar();
+        Calendar nextWeek = new GregorianCalendar(2016, Calendar.MARCH, 7); // first Monday
+
+        currentCal.setTime(currentDate);
+
+        while (nextWeek.getTime().before(currentCal.getTime())) { // moves nextWeek to next week's Monday
+            nextWeek.add(Calendar.WEEK_OF_YEAR, 1);
+        }
+
+        Calendar lastWeek = new GregorianCalendar();
+        lastWeek.setTime(nextWeek.getTime());
+        lastWeek.add(Calendar.WEEK_OF_YEAR, -1); // lastWeek is 1 week before nextWeek
+
+        int currentYear = currentCal.get(Calendar.YEAR);
+        int firstDay = lastWeek.get(Calendar.DAY_OF_MONTH);
+        int lastDay = nextWeek.get(Calendar.DAY_OF_MONTH);
+        int firstMonth = lastWeek.get(Calendar.MONTH) + 1;
+        int lastMonth = nextWeek.get(Calendar.MONTH) + 1;
+
+        Utility.startDate = Utility.getDateString(currentYear, firstMonth, firstDay);
+        Utility.endDate = Utility.getDateString(currentYear, lastMonth, lastDay);
     }
 }
