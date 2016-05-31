@@ -68,6 +68,7 @@ public class LeaderboardFragment extends Fragment {
         mRecyclerAdapter = new FirebaseRecyclerAdapter<Profile, LeaderboardViewHolder>(Profile.class, R.layout.leaderboard_item_view, LeaderboardViewHolder.class, mProfileRef) {
             @Override
             protected void populateViewHolder(LeaderboardViewHolder leaderboardViewHolder, Profile profile, int i) {
+                leaderboardViewHolder.setPosition(i);
                 leaderboardViewHolder.setProfilePic(profile.getProfilePic());
                 leaderboardViewHolder.setName(profile.getName());
                 leaderboardViewHolder.setCorrectPicks(profile.getTotalCorrectPicks());
@@ -134,15 +135,21 @@ public class LeaderboardFragment extends Fragment {
 
     private static class LeaderboardViewHolder extends RecyclerView.ViewHolder {
 
+        private TextView position;
         private ImageView profilePic;
         private TextView name;
         private TextView correctPicks;
 
         public LeaderboardViewHolder(View itemView) {
             super(itemView);
+            position = (TextView)itemView.findViewById(R.id.position);
             profilePic = (ImageView)itemView.findViewById(R.id.profile_pic);
             name = (TextView)itemView.findViewById(R.id.name);
             correctPicks = (TextView)itemView.findViewById(R.id.correct_picks);
+        }
+
+        public void setPosition(int position) {
+            this.position.setText(String.valueOf(++position));
         }
 
         public void setProfilePic(String profilePic) {
