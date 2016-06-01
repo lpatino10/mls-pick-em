@@ -24,6 +24,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -65,7 +66,8 @@ public class LeaderboardFragment extends Fragment {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(llm);
 
-        mRecyclerAdapter = new FirebaseRecyclerAdapter<Profile, LeaderboardViewHolder>(Profile.class, R.layout.leaderboard_item_view, LeaderboardViewHolder.class, mProfileRef) {
+        Query leaderboardQuery = mProfileRef.orderByChild("totalCorrectPicks");
+        mRecyclerAdapter = new FirebaseRecyclerAdapter<Profile, LeaderboardViewHolder>(Profile.class, R.layout.leaderboard_item_view, LeaderboardViewHolder.class, leaderboardQuery) {
             @Override
             protected void populateViewHolder(LeaderboardViewHolder leaderboardViewHolder, Profile profile, int i) {
                 leaderboardViewHolder.setPosition(i);
@@ -111,9 +113,12 @@ public class LeaderboardFragment extends Fragment {
                             int oldTotalCorrectPicks = userProfile.getTotalCorrectPicks();
                             int newTotalCorrectPicks = finalNewThisWeekCorrectPicks + userProfile.getPreviousCorrectPicks();
 
-                            if (newTotalCorrectPicks > oldTotalCorrectPicks) {
+                            Log.d("PICK_TEST", "oldTotalCorrectPicks: " + oldTotalCorrectPicks + "   newTotalCorrectPicks: " + newTotalCorrectPicks);
+
+                            if (newTotalCorrectPicks < oldTotalCorrectPicks) {
                                 Map<String, Object> updateMap = new HashMap<>();
                                 updateMap.put("totalCorrectPicks", newTotalCorrectPicks);
+                                updateMap.put("previousCorrectPicks", newTotalCorrectPicks);
                                 userProfileRef.updateChildren(updateMap);
                             }
                         }
@@ -161,6 +166,7 @@ public class LeaderboardFragment extends Fragment {
         }
 
         public void setCorrectPicks(int correctPicks) {
+            correctPicks = correctPicks * -1;
             String correctPickStr = correctPicks + "/" + Utility.totalGamesPlayed;
             this.correctPicks.setText(correctPickStr);
         }
