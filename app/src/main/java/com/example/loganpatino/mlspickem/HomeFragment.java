@@ -83,7 +83,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void clickAction() {
-        Toast.makeText(getActivity().getApplicationContext(), String.valueOf(Utility.totalGamesPlayed), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity().getApplicationContext(), String.valueOf(Utility.totalGamesPlayed), Toast.LENGTH_SHORT).show();
 
         FragmentManager fragmentManager = getFragmentManager();
         Fragment fragment;

@@ -112,9 +112,9 @@ public class GameListFragment extends Fragment {
                     if (currentGame.getHomeScore() > -1) {
                         Utility.totalGamesPlayed++;
                     }
-                    String key = Utility.getKeyFromGame(currentGame);
+                    final String key = Utility.getKeyFromGame(currentGame);
 
-                    DatabaseReference gamePickRef = userPicksRef.child(key);
+                    final DatabaseReference gamePickRef = userPicksRef.child(key);
                     gamePickRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -122,6 +122,9 @@ public class GameListFragment extends Fragment {
                             if (dataSnapshot.getValue() == null) {
                                 Utility.gameMap.put(currentGame, Utility.Selection.NONE);
                                 Utility.gameList.add(currentGame);
+                                Map<String, Object> updateMap = new HashMap<>();
+                                updateMap.put(key, Utility.getStringFromSelection(Utility.Selection.NONE));
+                                userPicksRef.updateChildren(updateMap);
                             } else {
                                 Utility.gameMap.put(currentGame, Utility.getSelectionFromString(dataSnapshot.getValue(String.class)));
                                 Utility.gameList.add(currentGame);
@@ -131,13 +134,12 @@ public class GameListFragment extends Fragment {
                             Utility.hasDataBeenLoaded = true;
 
                             String newFirstDate = Utility.gameList.get(0).getDate();
-                            Log.d("TIME_TEST", "oldFirstDate: " + oldFirstDate[0] + "  newFirstDate: " + newFirstDate);
+                            //Log.d("TIME_TEST", "oldFirstDate: " + oldFirstDate[0] + "  newFirstDate: " + newFirstDate);
                             if ((oldFirstDate[0] != null) && !oldFirstDate[0].equals(newFirstDate)) {
                                 clearUserPicks();
+                                oldFirstDate[0] = newFirstDate;
+                                mSharedPreferences.edit().putString(Utility.FIRST_GAME_DATE, oldFirstDate[0]).apply();
                             }
-
-                            oldFirstDate[0] = newFirstDate;
-                            mSharedPreferences.edit().putString(Utility.FIRST_GAME_DATE, oldFirstDate[0]).apply();
                         }
 
                         @Override

@@ -95,9 +95,15 @@ public class LeaderboardFragment extends Fragment {
                 for (DataSnapshot idSnapshot : dataSnapshot.getChildren()) {
                     for (DataSnapshot pickSnapshot : idSnapshot.getChildren()) {
                         String gameKey = pickSnapshot.getKey();
-                        Log.d("KEY_TEST", gameKey);
+                        //Log.d("KEY_TEST", gameKey);
                         Utility.Selection gamePick = Utility.getSelectionFromString(pickSnapshot.getValue(String.class));
                         Game currentGame = Utility.getGameFromKey(gameKey);
+
+                        /* in case user's picks aren't up to date, we avoid calculating this
+                           score and just present the last saved number of correct picks */
+                        if (currentGame == null) {
+                            return;
+                        }
 
                         if (Utility.getTextColorFromSelection(currentGame, gamePick) == Color.GREEN) {
                             newThisWeekCorrectPicks++;
@@ -113,7 +119,7 @@ public class LeaderboardFragment extends Fragment {
                             int oldTotalCorrectPicks = userProfile.getTotalCorrectPicks();
                             int newTotalCorrectPicks = finalNewThisWeekCorrectPicks + userProfile.getPreviousCorrectPicks();
 
-                            Log.d("PICK_TEST", "oldTotalCorrectPicks: " + oldTotalCorrectPicks + "   newTotalCorrectPicks: " + newTotalCorrectPicks);
+                            //Log.d("PICK_TEST", "oldTotalCorrectPicks: " + oldTotalCorrectPicks + "   newTotalCorrectPicks: " + newTotalCorrectPicks);
 
                             if (newTotalCorrectPicks < oldTotalCorrectPicks) {
                                 Map<String, Object> updateMap = new HashMap<>();
