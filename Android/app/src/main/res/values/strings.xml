@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">MLS Pick \'Em</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="image_backup">team logo</string>
+    <string name="middle">vs.</string>
+    <string name="time">Game time</string>
+    <string name="date">Game date</string>
+    <string name="home_cd">Home Team Logo</string>
+    <string name="away_cd">Away Team Logo</string>
+    <string name="title_activity_edit">MLS Pick \'Em</string>
+
+    <string name="fire">Chicago Fire</string>
+    <string name="rapids">Colorado Rapids</string>
+    <string name="crew">Columbus Crew SC</string>
+    <string name="dc">D.C. United</string>
+    <string name="dallas">FC Dallas</string>
+    <string name="dynamo">Houston Dynamo</string>
+    <string name="galaxy">LA Galaxy</string>
+    <string name="impact">Montreal Impact</string>
+    <string name="revolution">New England Revolution</string>
+    <string name="nyc">New York City FC</string>
+    <string name="red_bulls">New York Red Bulls</string>
+    <string name="orlando">Orlando City SC</string>
+    <string name="union">Philadelphia Union</string>
+    <string name="timbers">Portland Timbers</string>
+    <string name="rsl">Real Salt Lake</string>
+    <string name="earthquakes">San Jose Earthquakes</string>
+    <string name="sounders">Seattle Sounders FC</string>
+    <string name="skc">Sporting Kansas City</string>
+    <string name="toronto">Toronto FC</string>
+    <string name="whitecaps">Vancouver Whitecaps FC</string>
+
+    <string name="your_pick">Your pick: </string>
+    <string name="win">Win</string>
+    <string name="draw">Draw</string>
+    <string name="none">None</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+</resources>

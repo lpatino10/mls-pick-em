@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/loganpatino/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit2/retrofit/2.0.2/43eeae0b9fb087bb3194ba59ab63a38a32fbf3e/retrofit-2.0.2.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="043eeae0b9fb087bb3194ba59ab63a38a32fbf3e">
+        <dex dex="/Users/loganpatino/Documents/Android_Dev/AndroidStudioProjects/MyApplication/app/build/intermediates/transforms/dex/debug/folders/1000/10/retrofit-2.0.2_95eda4c78c16614ac7d197da6149b2e0ffa9f90b/classes.dex" />
+    </item>
+    <item
+        jar="/Users/loganpatino/Documents/Android_Dev/AndroidStudioProjects/MyApplication/app/build/intermediates/exploded-aar/com.google.firebase/firebase-database/9.0.0/jars/classes.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="32a5a566ae197603d0bed3e6d1d275f6a771564e">
+        <dex dex="/Users/loganpatino/Documents/Android_Dev/AndroidStudioProjects/MyApplication/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-database-9.0.0_567884a6602c863b8470b1b50099e80ae10fc0e4/classes.dex" />
+    </item>
+    <item
+        jar="/Users/loganpatino/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.4/695b63d702f505b9b916e02272e3b6381bade7f/gson-2.4.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="0695b63d702f505b9b916e02272e3b6381bade7f">
+        <dex dex="/Users/loganpatino/Documents/Android_Dev/AndroidStudioProjects/MyApplication/app/build/intermediates/transforms/dex/debug/folders/1000/10/gson-2.4_bc6750030ce86fe6b3c2dfbcc9e4669317cf9143/classes.dex" />
+    </item>
+    <item
+        jar="/Users/loganpatino/Documents/Android_Dev/AndroidStudioProjects/MyApplication/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.0.0/jars/classes.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="6f65c144283b31b4b9a70e6e7aa4c4a1c897d4b8">
+        <dex dex="/Users/loganpatino/Documents/Android_Dev/AndroidStudioProjects/MyApplication/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-base-9.0.0_c866f15742723343ab942d6584d889591b176010/classes.dex" />
+    </item>
+    <item
+        jar="/Users/loganpatino/Documents/Android_Dev/AndroidStudioProjects/MyApplication/app/build/intermediates/exploded-aar/com.google.firebase/firebase-database-connection/9.0.0/jars/classes.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="ef5c5c2afbd174d55cf1cfcac7d0346cbc4c1322">
+        <dex dex="/Users/loganpatino/Documents/Android_Dev/AndroidStudioProjects/MyApplication/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-database-connection-9.0.0_6a4a9cf6df6db58edccf2688571bfe97af570f15/classes.dex" />
+    </item>
+    <item
+        jar="/Users/loganpatino/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit2/converter-gson/2.0.0-beta4/de5935a367ba5e343e9df786ac8fc0c7d52b5f0c/converter-gson-2.0.0-beta4.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="de5935a367ba5e343e9df786ac8fc0c7d52b5f0c">
+        <dex dex="/Users/loganpatino/Documents/Android_Dev/AndroidStudioProjects/MyApplication/app/build/intermediates/transforms/dex/debug/folders/1000/10/converter-gson-2.0.0-beta4_b60b2a437cc8c893fc81de5e07f1478339d0de48/classes.dex" />
+    </item>
+    <item
+        jar="/Users/loganpatino/Documents/Android_Dev/AndroidStudioProjects/MyApplication/app/build/intermediates/exploded-aar/com.google.firebase/firebase-iid/9.0.0/jars/classes.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="ea4b54dcbfe5ac05efb0a314105f07258118d3a7">
+        <dex dex="/Users/loganpatino/Documents/Android_Dev/AndroidStudioProjects/MyApplication/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-iid-9.0.0_eeb8135852f64ef30649bc1bd7e808d8063595b5/classes.dex" />
+    </item>
+    <item
+        jar="/Users/loganpatino/Documents/Android_Dev/AndroidStudioProjects/MyApplication/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-auth-base/9.0.0/jars/classes.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="7a23185c9b1c100e7d1a32275017e4712e31c796">
+        <dex dex="/Users/loganpatino/Documents/Android_Dev/AndroidStudioProjects/MyApplication/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-auth-base-9.0.0_ed74ebf8613588d8099db552c7f015aa4190af27/classes.dex" />
+    </item>
+
+</items>
